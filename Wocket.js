@@ -58,16 +58,16 @@ function Wocket(wSocket) {
     
     this.emit = function(event) {
         try {    
-            //check true need for this verification due to if it disconnects it will be notifie
-            //if(client.readyState != client.OPEN) //check if the socket is opened
-                //throw "emitFailedSocketNotOpen";  //if not, throw an error socket not open       
+            //this is needed due to send while not connected do not throw exceptions
+            if(wSocket.readyState != 1) //check if the socket is opened
+                throw "emitFailedSocketNotOpen";  //if not, throw an error socket not open       
             var args = [].slice.call(arguments) // slice without parameters copies all
             var dataObj = { event: args.shift(), args: args };  //create the data object with the data passed           
             wSocket.send(getDataStr(dataObj));    //send the data string generated from the the dataobj
         }
         catch(error) {
             throwError(error);  //throw error methods  
-        }       
+        }      
     }; 
     
     this.getReadyState = function() {
@@ -81,8 +81,8 @@ function Wocket(wSocket) {
         //must verify what else is needed to close the connection
         //and verify if once this method is called, the onclose method is automatically called aswell or we need to force its call
         
-        if(wSocket.readyState != 2) //if it is not already closed,
-            wSocket.close(4, "SERVERDISC");     //close the socket connection 
+        if(wSocket.readyState == 1) //if it is connected
+            wSocket.close();     //close the socket connection          
     };   
     
     function eventOnMessage(message) {
