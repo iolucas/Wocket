@@ -81,7 +81,7 @@ function Wocket(wSocket) {
         //must verify what else is needed to close the connection
         //and verify if once this method is called, the onclose method is automatically called aswell or we need to force its call
         
-        if(wSocket.readyState == 2) //if it is not already closed,
+        if(wSocket.readyState != 2) //if it is not already closed,
             wSocket.close(4, "SERVERDISC");     //close the socket connection 
     };   
     
