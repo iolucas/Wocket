@@ -9,6 +9,8 @@ function Wocket(wSocket) {
     var self = this;    //holds its own ref
     var events = [];    //events array to store callbacks
     
+    this.ws = wSocket;  //get websocket reference
+    
     if(!wSocket) {    //if not specified, so its client side
         this.connect = function(serverAddr) {   //creates connect method           
             try {
